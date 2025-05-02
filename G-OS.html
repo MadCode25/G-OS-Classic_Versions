@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>G-OS - By AmadOS Build 1050</title>
+    <link rel="icon" href="G.png" type="image/x-icon">
+    <link rel="stylesheet" href="G.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" />
+    <style>
+      body {
+        background-color: #3F9F5B;
+        font-family: Oswald;
+      }
+
+      .app {
+        text-align-last: right;
+        border-style: groove;
+        border-color: #3F9F5B;
+        background-color: #79B473;
+        display: flex;
+        flex-direction: column; /* Align items vertically */
+        gap: 40px; /* Adds space between each app. */
+      }
+
+      .main-window {
+        border: 5px solid;
+        padding: 20px;
+        width: 400px;
+        resize: both;
+        overflow: auto;
+        background-color: #79B473;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      .warn {
+        font-size: 20px;
+      }
+
+      .about_aos {
+        color: grey;
+      }
+
+      .settings-opt {
+        color: black;
+        background-color: #79B473;
+        border-style: groove;
+        border-color: #3F9F5B;
+      }
+
+      .security-settings {
+        resize: both;
+        overflow: auto;
+        background-color: green;
+        display: none;
+      }
+
+      .customize-desktop {
+        display: none;
+        position: absolute;
+        background-color: green;
+        border: 1px solid #ccc;
+        width: 400px;
+      }
+
+      #about_window {
+        text-align: center;
+      }
+
+      .security-opt1 {
+        border-style: groove;
+        border-color: #3F9F5B;
+      }
+
+      #logout-window {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 2px solid black;
+        z-index: 10;
+      }
+      .opt-button {
+        border-style: groove;
+        background-color: green;
+        font-style: Oswald;
+      }
+
+     .logout {
+}
+    </style>
+  </head>
+  <body>
+
+    <!-- App Buttons -->
+    <button id="logout" class="logout" onclick="logout()">Logout</button>
+    <button id="Settings" class="app" onclick="settings()">Settings</button>
+    <button id="about" class="app" onclick="about()">About G-OS and AmadOS</button>
+
+    <!-- Settings Window -->
+    <div id="window_settings" class="main-window" style="display: none;">
+      <h1 class="warn">Settings will be coming soon</h1>
+      <p>Not so fun fact: G-OS demo is in development (:</p>
+      <button class="settings-opt" onclick="settings_opt_1()">Security</button>
+      <div id="settings_opt-1" class="security-settings">
+        <h1>Security</h1>
+        <label>Password:</label>
+        <input class="security-opt1" type="password" />
+      </div>
+      <h6>Click settings again to close.</h6>
+    </div>
+
+    <!-- About Window -->
+    <div id="about_window" class="main-window" style="display: none;">
+      <h1>About</h1>
+      <p>OS - G-OS<br>Developer - AmadOS <br> Version: Build 1050</p>
+      <p>Green-OS - By AmadOS</p>
+      <p>Copyright AmadOS</p>
+      <p class="about_aos">AmadOS is a single-employee home company that makes OSes for fun</p>
+    </div>
+
+    <!-- Right-Click Menu -->
+    <div class="customize-desktop" id="customize">
+      <h5>A A Ap, nope, still comin' soon, haha (:</h5>
+      <p>Coming soon!</p>
+    </div>
+
+    <!-- Logout Confirmation -->
+    <div id="logout-window">
+  <h3>Are you sure you want to logout?</h3>
+  <p>Unsaved changes may not be saved (but you can leave nothing, since there's no file explorer yet.)</p>
+  <button class="opt-button" onclick="confirmLogout()">Yes</button>
+  <button class="opt-button" onclick="cancelLogout()">Cancel</button>
+</div>
+
+
+    <!-- Scripts -->
+    <script>
+      function settings() {
+        const x = document.getElementById("window_settings");
+        x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
+      }
+
+      function about() {
+        const x2 = document.getElementById("about_window");
+        x2.style.display = (x2.style.display === "none" || x2.style.display === "") ? "block" : "none";
+      }
+
+      function settings_opt_1() {
+        const x = document.getElementById("settings_opt-1");
+        x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
+      }
+
+      function logout() {
+        const x = document.getElementById("logout-window");
+        const display = window.getComputedStyle(x).display;
+        x.style.display = (display === "none") ? "block" : "none";
+      }
+
+      // Right-click menu logic
+      const menu = document.getElementById('customize');
+
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        menu.style.top = `${e.pageY}px`;
+        menu.style.left = `${e.pageX}px`;
+        menu.style.display = 'block';
+      });
+
+      document.addEventListener('click', function() {
+        menu.style.display = 'none';
+      });
+      function confirmLogout() {
+  alert("Logging out... (but not really, demo OS!)");
+  document.getElementById("logout-window").style.display = "none";
+}
+
+function cancelLogout() {
+  document.getElementById("logout-window").style.display = "none";
+}
+
+    </script>
+  </body>
+</html>
+
+
