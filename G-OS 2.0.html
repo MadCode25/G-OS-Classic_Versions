@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>G-OS - By AmadOS Build 1050</title>
+  <link rel="icon" href="G.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #3F9F5B;
+      font-family: Oswald, sans-serif;
+    }
+
+    .app, .logout {
+      border-style: groove;
+      border-color: #3F9F5B;
+      background-color: #79B473;
+      display: inline-block;
+      margin: 10px;
+      border-radius: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    .main-window, .login-window {
+      border: 5px solid;
+      width: 400px;
+      background-color: #79B473;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      display: none;
+    }
+
+    .window-header {
+      background-color: #558B57;
+      padding: 10px;
+      font-weight: bold;
+      color: white;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      cursor: move;
+    }
+
+    .window-content {
+      padding: 20px;
+    }
+
+    .settings-opt, .opt-button {
+      color: black;
+      background-color: #79B473;
+      border-style: groove;
+      border-color: #3F9F5B;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .security-settings {
+      background-color: green;
+      display: none;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .customize-desktop {
+      display: none;
+      position: absolute;
+      background-color: green;
+      border: 1px solid #ccc;
+      width: 400px;
+      padding: 10px;
+    }
+
+    #logout-window {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border: 2px solid black;
+      border-radius: 10px;
+      z-index: 10;
+    }
+
+    .about_aos {
+      color: grey;
+    }
+
+    #login {
+      display: block;
+      background-color: white;
+      padding: 20px;
+      border: 3px solid black;
+      border-radius: 10px;
+    }
+
+    #login input {
+      display: block;
+      margin-top: 10px;
+      padding: 8px;
+      width: 90%;
+      border-radius: 5px;
+    }
+
+    #login button {
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Buttons -->
+  <button id="logout" class="logout" onclick="logout()">Logout</button>
+  <button id="Settings" class="app" onclick="settings()">Settings</button>
+  <button id="about" class="app" onclick="about()">About G-OS and AmadOS</button>
+
+  <!-- Settings Window -->
+  <div id="window_settings" class="main-window">
+    <div id="settings-header" class="window-header">Settings</div>
+    <div class="window-content">
+      <h1 class="warn">Settings Beta</h1>
+      <button class="settings-opt" onclick="settings_opt_1()">Security</button>
+      <div id="settings_opt-1" class="security-settings">
+        <h2>Security</h2>
+        <label for="passwordInput">Set Password:</label>
+        <input id="passwordInput" class="security-opt1" type="password" placeholder="Enter password" />
+        <button onclick="savePassword()">Save Password</button>
+      </div>
+      <h6>Click settings again to close.</h6>
+    </div>
+  </div>
+
+  <!-- About Window -->
+  <div id="about_window" class="main-window">
+    <div id="about-header" class="window-header">About</div>
+    <div class="window-content">
+      <h1>About</h1>
+      <p>OS - G-OS<br>Developer - AmadOS <br> Version: Build 1050</p>
+      <p>Green-OS - By AmadOS</p>
+      <p>Copyright AmadOS</p>
+      <p class="about_aos">AmadOS is a single-employee home company that makes OSes for fun</p>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation -->
+  <div id="logout-window">
+    <div id="logout-header" class="window-header">Logout</div>
+    <div class="window-content">
+      <h3>Are you sure you want to logout?</h3>
+      <button class="opt-button" onclick="confirmLogout()">Yes</button>
+      <button class="opt-button" onclick="cancelLogout()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Right-click menu -->
+  <div class="customize-desktop" id="customize">
+    <h5>Coming soon!</h5>
+    <p>Hint: press Ctrl+Shift+C to inspect elements.</p>
+  </div>
+
+  <!-- Login -->
+  <div class="login-window" id="login">
+    <h1>Login</h1>
+    <input id="loginPassword" type="password" placeholder="Enter password" />
+    <button onclick="attemptLogin()">Login</button>
+  </div>
+
+  <script>
+    function settings() {
+      const x = document.getElementById("window_settings");
+      x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
+    }
+
+    function about() {
+      const x2 = document.getElementById("about_window");
+      x2.style.display = (x2.style.display === "none" || x2.style.display === "") ? "block" : "none";
+    }
+
+    function settings_opt_1() {
+      const x = document.getElementById("settings_opt-1");
+      x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
+    }
+
+    function logout() {
+      document.getElementById("logout-window").style.display = "block";
+    }
+
+    function confirmLogout() {
+      document.getElementById("logout-window").style.display = "none";
+      document.getElementById("login").style.display = "block";
+      hideMainApp();
+    }
+
+    function cancelLogout() {
+      document.getElementById("logout-window").style.display = "none";
+    }
+    function attemptLogin() {
+  const entered = document.getElementById("loginPassword").value;
+  const stored = localStorage.getItem("osPassword") || " ";
+
+  if (entered === stored) {
+    document.getElementById("login").style.display = "none";
+    showMainApp();
+  } else {
+    alert("Incorrect password. Try again.");
+  }
+}
+
+
+
+    function savePassword() {
+      const pwd = document.getElementById("passwordInput").value.trim();
+      localStorage.setItem("osPassword", pwd === "" ? " " : pwd);
+      alert("Password saved!");
+    }
+
+    function showMainApp() {
+      document.getElementById("logout").style.display = "inline-block";
+      document.getElementById("Settings").style.display = "inline-block";
+      document.getElementById("about").style.display = "inline-block";
+    }
+
+    function hideMainApp() {
+      document.getElementById("logout").style.display = "none";
+      document.getElementById("Settings").style.display = "none";
+      document.getElementById("about").style.display = "none";
+    }
+
+    // Make draggable
+    function makeDraggable(windowId, headerId) {
+      const win = document.getElementById(windowId);
+      const header = document.getElementById(headerId);
+      let offsetX = 0, offsetY = 0, isDragging = false;
+
+      header.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - win.offsetLeft;
+        offsetY = e.clientY - win.offsetTop;
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stop);
+      });
+
+      function drag(e) {
+        if (isDragging) {
+          win.style.left = `${e.clientX - offsetX}px`;
+          win.style.top = `${e.clientY - offsetY}px`;
+        }
+      }
+
+      function stop() {
+        isDragging = false;
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', stop);
+      }
+    }
+
+    window.onload = () => {
+      makeDraggable('window_settings', 'settings-header');
+      makeDraggable('about_window', 'about-header');
+      makeDraggable('logout-window', 'logout-header');
+      hideMainApp();
+    };
+
+    // Right-click menu
+    const menu = document.getElementById('customize');
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      menu.style.top = `${e.pageY}px`;
+      menu.style.left = `${e.pageX}px`;
+      menu.style.display = 'block';
+    });
+
+    document.addEventListener('click', function() {
+      menu.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
