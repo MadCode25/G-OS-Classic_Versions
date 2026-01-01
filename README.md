@@ -13,5 +13,5 @@ You don't entirely <strong>download</strong> it, but you can upload it, and doub
 Yesssssss, G-OS 2 is actually here! Do some stuff in this OS that is entirely made by JS and HTML (and obviously the style from CSS).<br>
 <strong>G-OS 3.0 is finally released!</strong><br>
 BUGS PATCHED! (That are from G-OS 2.0), and more features added.
-<strong>fgets() function added in the J# IDE (for G-OS 3.0U and 4.0, they're released)</strong>
+<strong>fgets() function added in the J# IDE (for G-OS 3.0U and 4.0, they're released)</strong><br>
 Requests an input from user.
