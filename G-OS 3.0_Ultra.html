@@ -1,0 +1,585 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>G-OS - By AmadOS Build 1069</title>
+  <link rel="icon" href="G.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #3F9F5B;
+      font-family: Oswald, sans-serif;
+      overflow: hidden;
+    }
+
+    .app, .logout {
+      border-style: groove;
+      border-color: #3F9F5B;
+      background-color: #79B473;
+      display: inline-block;
+      margin: 10px;
+      border-radius: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    .main-window {
+      border: 5px solid;
+      width: 800px;
+      background-color: #79B473;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      display: none;
+      overflow: hidden;
+    }
+
+    .window-header {
+      background-color: #558B57;
+      padding: 10px;
+      font-weight: bold;
+      color: white;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      cursor: move;
+    }
+
+    .window-content {
+      padding: 20px;
+    }
+
+    .settings-opt, .opt-button {
+      color: black;
+      background-color: #79B473;
+      border-style: groove;
+      border-color: #3F9F5B;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .security-settings {
+      background-color: #6da167;
+      display: none;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .customize-desktop {
+      display: none;
+      position: absolute;
+      background-color: green;
+      border: 1px solid #ccc;
+      width: 400px;
+      padding: 10px;
+    }
+
+    #logout-window {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border: 2px solid black;
+      border-radius: 10px;
+      z-index: 10;
+    }
+
+    .about_aos {
+      color: grey;
+    }
+
+    #login {
+      display: block;
+      background-color: white;
+      padding: 20px;
+      border: 3px solid black;
+      border-radius: 10px;
+      top: 50%;
+      left: 50%;
+      width: 400px;
+      position: absolute;
+      transform: translate(-50%, -50%);
+    }
+
+    #login input {
+      display: block;
+      margin-top: 10px;
+      padding: 8px;
+      width: 90%;
+      border-radius: 5px;
+    }
+
+    #login button {
+      margin-top: 10px;
+      background-color: #3F9F5B;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .g_button{
+      background-color: #79B473;
+      border-radius: 5px;
+      border-color: #3F9F5B;
+      padding: 5px;
+    }
+
+    #jsh-code-area{
+      border: 2px solid black;
+      padding: 10px;
+      background-color: #558B57;
+      border-radius: 10px;;
+      font-family: monospace;
+      font-size: 14px;
+      resize: none;
+      position: absolute;
+      left: 10%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Buttons -->
+  <button id="logout" class="logout" onclick="logout()">Logout</button>
+  <button id="Settings" class="app" onclick="settings()">Settings</button>
+  <button id="about" class="app" onclick="about()">About G-OS and AmadOS</button>
+  <button id="jsh_ide" class="app" onclick="jshIDE()">J Sharp IDE</button>
+  <button id="files_explorer" class="app" onclick="FE()">Files Explorer</button>
+  
+
+  <!-- Settings Window -->
+  <div id="window_settings" class="main-window" style="width: 400px;">
+    <div id="settings-header" class="window-header">Settings</div>
+    <div class="window-content">
+      <h1 class="warn">Settings Beta</h1>
+      <button class="settings-opt" onclick="settings_opt_1()">Security</button>
+      <div id="settings_opt-1" class="security-settings">
+        <h2>Security</h2>
+        <label for="passwordInput">Set Password:</label>
+        <input id="passwordInput" class="security-opt1" type="password" placeholder="Enter password" />
+        <button class="g_button" onclick="savePassword()">Save Password</button>
+      </div>
+      <h6>Click settings again to close.</h6>
+    </div>
+  </div>
+
+  <!-- About Window -->
+  <div id="about_window" class="main-window" style="width: 400px;">
+    <div id="about-header" class="window-header">About</div>
+    <div class="window-content">
+      <h1>About</h1>
+      <p>OS - G-OS<br>Developer - AmadOS <br> Version: Build 1032</p>
+      <p>Green-OS - By AmadOS</p>
+      <p>Copyright AmadOS</p>
+      <p>1st version developed in: 2025, May 2</p>
+      <p>Current version development date: 2025, November, 7</p>
+      <p class="about_aos">AmadOS is only a fiction company, it is NOT affiliated with any other OS manufacturer.</p>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation -->
+  <div id="logout-window">
+    <div id="logout-header" class="window-header">Logout</div>
+    <div class="window-content">
+      <h3>Are you sure you want to logout?</h3>
+      <p>You might have unsaved changes.</p>
+      <button class="opt-button" onclick="confirmLogout()">Yes</button>
+      <button class="opt-button" onclick="cancelLogout()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Right-click menu -->
+  <div class="customize-desktop" id="customize">
+    <h5>Coming soon!</h5>
+    <p>Hint: press Ctrl+Shift+C to inspect elements.</p>
+  </div>
+  <!-- J# IDE Window -->
+  <div class="main-window" id="jsh-ide" style="width:800; height: 250px; text-align: center;">
+    <div class="window-header" id="jsh-ide-header">AmadOS J# (J Sharp) IDE <br><p style="color:rgb(201, 201, 201);font-size: small; display: inline;">Needs fullscreen.</p>
+      <button class="g_button" id="max_min_imizer" style="position: absolute; left: 730px; display: block;" onclick="winMaximize_Minimize('jsh-ide')">Max. Min</button>
+    </div>
+    <h3>J# (J Sharp) IDE</h3>
+    <textarea id="jsh-code-area" style="width: 700px; height: 420px;" placeholder="Enter J# code here..." spellcheck="false" data-gramm="false">console.string.jout("Hello, World!");</textarea>
+    <pre id="jsh-output-area" style="border: 2px solid black; padding: 10px; background-color: #558B57; border-radius: 10px; font-family: monospace; font-size: 14px; position: absolute; right: 10%; width: 400px; height: 420px; overflow-y: auto; top:119px;">Guest -> /gworkspaces/myProjects (branch): </pre>
+    <button class="g_button" style="position: absolute; bottom: 470px; left: 1135px;" onclick="runjshIDE()">Run J# Code</button>
+  </div>
+  <!-- Files Explorer Window -->
+  <div class="main-window" id="files-explorer" style="width: 800px; height: 300px; text-align: center;">
+    <div class="window-header" id="files-explorer-header">Files Explorer <button class="g_button" id="max_min_imizer" style="position: absolute; left: 732px; display: block;" onclick="winMaximize_Minimize('files-explorer')">Max. Min</button></div>
+    <div class="window-content">
+      <h3>Files Explorer</h3>
+      <p>This is where we store your important stuff.</p>
+      <button class="g_button" onclick="openFolder('myJSHprojects')" style="width: 300px; height: 100px; position: absolute; left: 60px;">myJSHprojects</button>
+      <button class="g_button" onclick="openFolder('gSys25')" style="width: 300px; height: 100px; position: absolute; left: 400px;">gSys25 System Files</button>
+      <div id="myJSHprojects" style="display: none; position: absolute; bottom:30px; height: 300px;left: 23%;background-color: #6da167; padding: 10px; border-radius: 10px; width: 800px;">
+        <h4>myJSHprojects</h4>
+        <hr style="border-color: black;">
+        <button class="g_button" onclick="jshIDE(); openJSHfile('Day1'); winMaximize_Minimize('jsh-ide'); FE()">Day1.jsh</button>
+        <button class="g_button" onclick="jshIDE(); openJSHfile('Day2'); winMaximize_Minimize('jsh-ide'); FE()">Day2.jsh</button>
+        <button class="g_button" onclick="jshIDE(); openJSHfile('Day3'); winMaximize_Minimize('jsh-ide'); FE()">Day3.jsh</button>
+        <button class="g_button" onclick="jshIDE(); openJSHfile('HWFP'); winMaximize_Minimize('jsh-ide'); FE()">HelloWorld.jsh</button>
+        <button class="g_button" onclick="jshIDE(); openJSHfile('SecretFunctionsuCanuse'); winMaximize_Minimize('jsh-ide'); FE()">SecretFunctionsuCanuse.jsh</button>
+      </div>
+      <div id="gSys25" style="display: none; position: absolute; bottom:30px; height: 300px;left: 23%;background-color: #6da167; padding: 10px; border-radius: 10px; width: 800px;">
+        <h4>gSys25 System Files</h4>
+        <hr style="border-color: black;">
+        <button class="g_button" onclick="const wfe = document.getElementById('warningFE'); wfe.textContent = 'Access Denied: You do not have permission to access mainSys.gsf.';">mainSys.gsf</button>
+        <button class="g_button" onclick="openFolder('gSys25'); openFolder('JSC')">JshCodeStation</button>
+        <p id="warningFE" style="color: red;"></p>
+      </div>
+      <div id="JSC" style="display: none; position: absolute; bottom:30px; height: 300px;left: 23%;background-color: #6da167; padding: 10px; border-radius: 10px; width: 800px;">
+        <h4>JshCodeStation</h4>
+        <hr style="border-color: black;">
+        <button class="g_button" onclick="showContentsOfFile('jshCompiler.js')">jshCompiler.js</button>
+        <button class="g_button" onclick="openFolder('JSC')">Close Subfolder</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <div class="login-window" id="login">
+    <h1>Login</h1>
+    <input id="loginPassword" type="password" placeholder="Enter password" />
+    <button onclick="attemptLogin()">Login</button>
+    <p id="text_warn" style="color: red; font-size: small;"></p>
+  </div>
+
+  <script>
+    // Start of main script for G-OS
+    // Global Variables
+    let entered = document.getElementById("loginPassword").value;
+    let stored = localStorage.getItem("osPassword") || " ";
+    let loggedIn = false;
+    let isDragging = false;
+    const tw = document.getElementById("text_warn")
+    function settings() {
+      const x = document.getElementById("window_settings");
+      x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
+    }
+
+    function about() {
+      const x2 = document.getElementById("about_window");
+      x2.style.display = (x2.style.display === "none" || x2.style.display === "") ? "block" : "none";
+    }
+
+    function settings_opt_1() {
+      const x = document.getElementById("settings_opt-1");
+      x.style.display = (x.style.display === "none" || x.style.display === "") ? "block" : "none";
+    }
+    function jshIDE(){
+      const ideWindow = document.getElementById("jsh-ide");
+      ideWindow.style.display = (ideWindow.style.display === "none" || ideWindow.style.display === "") ? "block" : "none";
+    }
+    
+    function FE(){
+      const feWindow = document.getElementById("files-explorer");
+      feWindow.style.display = (feWindow.style.display === "none" || feWindow.style.display === "") ? "block" : "none";
+    }
+
+    function logout() {
+      document.getElementById("logout-window").style.display = "block";
+    }
+
+    function confirmLogout() {
+      document.getElementById("logout-window").style.display = "none";
+      document.getElementById("about_window").style.display = "none";
+      document.getElementById("window_settings").style.display = "none";
+      document.getElementById("files-explorer").style.display = "none";
+      document.getElementById("jsh-ide").style.display = "none";
+      document.getElementById("login").style.display = "block";
+      loggedIn = false;
+      hideMainApp();
+    }
+
+    function cancelLogout() {
+      document.getElementById("logout-window").style.display = "none";
+    }
+    function attemptLogin() {
+      entered = document.getElementById("loginPassword").value;
+    if (entered === stored) {
+      document.getElementById("login").style.display = "none";
+      loggedIn = true;
+      showMainApp();
+  } else {
+      tw.style.display = "block";
+      tw.innerText = "Incorrect password. Try again."
+  }
+
+
+}
+    // These functions are for storing... well data for files explorer :]
+    function openFolder(folderId) {
+      const folder = document.getElementById(folderId);
+      folder.style.display = (folder.style.display === "none" || folder.style.display === "") ? "block" : "none";
+    }
+    function openJSHfile(fileName) {
+      if (fileName === "Day1") {
+        document.getElementById("jsh-ide").style.display = "block";
+        document.getElementById("jsh-code-area").value = `<< AmadOS Tutorial | J Sharp tutorial 1\nconsole.string.jout("Hello, User!");\nconsole.string.jout("This is your first J# project!");\nconsole.string.jout("Try printing strings using console.string.jout()");`;
+      }
+      if (fileName === "Day2") {
+        document.getElementById("jsh-ide").style.display = "block";
+        document.getElementById("jsh-code-area").value = `console.string.jout("We have a new function for you!");\n console.string.jout("It's called throw error ()");\n throw "SyntaxError"("This is a syntax error example!");`;
+      }
+
+      if (fileName === "Day3") {
+        document.getElementById("jsh-ide").style.display = "block";
+        document.getElementById("jsh-code-area").value = `int myNumber;\nmyNumber = 42;\nconsole.string.jout("Your integer is: " + myNumber + " TYPE:INT");`;
+      }
+      if (fileName === "HWFP") {
+        document.getElementById("jsh-ide").style.display = "block";
+        document.getElementById("jsh-code-area").value = `console.string.jout("Hello, World!");`;
+      }
+
+      if(fileName === "SecretFunctionsuCanuse"){
+        document.getElementById("jsh-ide").style.display = "block";
+        document.getElementById("jsh-code-area").value = `<< Welcome to the secret functions file! \n << Here are some functions you can use in your J# scripts. \n\n << First one is JshError.onboard.privacy(); This function helps you protect sensitive\n<< information in your code. \n << When you use it, certain parts of your code will be hidden from view. \n\n << Example usage: \n JshError.onboard.privacy(); \n\n << Second one is console.string.Warn("Your warning message"); \n << This function allows you to display warning messages in the output. \n << It's useful for alerting users about potential issues without stopping the program. \n\n << Example usage: \n console.string.Warn("This is a warning message!");`;
+      }
+    }
+
+    function showContentsOfFile(fileName) {
+      if (fileName === "jshCompiler.js") {
+        document.getElementById("jsh-ide").style.display = "block";
+        document.getElementById("jsh-code-area").value = `// J# Script \n // Some parts are covered for your safety. \n async function runjshIDE(){
+      const code = document.getElementById("jsh-code-area").value.trim();
+    let output = document.getElementById("jsh-output-area");
+    let errored = 0;
+    JshError.onboard.privacy();
+    `;
+
+      }
+    }
+
+    function winMaximize_Minimize(el){
+      const win = document.getElementById(el);
+      const minMaxBtn = document.getElementById("max_min_imizer");
+      if (win.style.width !== "100%" && win.style.height !== "100%") {
+        win.style.width = "100%";
+        win.style.height = "98%";
+        win.style.top = "0";
+        win.style.left = "0";
+        win.style.transform = "none";
+        minMaxBtn.innerText = "Restore";
+        minMaxBtn.style.left = "185vh";
+        
+      } else {
+        win.style.width = "800px";
+        win.style.height = "250px";
+        win.style.top = "50%";
+        win.style.left = "50%";
+        win.style.transform = "translate(-50%, -50%)";
+        minMaxBtn.innerText = "Max. Min";
+        minMaxBtn.style.left = "730px";
+        makeDraggable(el, el + "-header" );
+      }
+    }
+
+
+
+    function savePassword() {
+      const pwd = document.getElementById("passwordInput").value.trim();
+      localStorage.setItem("osPassword", pwd === "" ? " " : pwd);
+      alert("Password saved!");
+    }
+
+    function showMainApp() {
+      if (entered === stored){
+        document.getElementById("logout").style.display = "inline-block";
+        document.getElementById("Settings").style.display = "inline-block";
+        document.getElementById("about").style.display = "inline-block";
+        document.getElementById("jsh_ide").style.display = "inline-block";
+        document.getElementById("files_explorer").style.display = "inline-block";
+      }
+      else{
+        tw.style.display = "block"
+        tw.innerText = "You can't enter without entering password!"
+        console.warn("EWP is not allowed for this G-OS version.")
+        console.log("Unfortunately, EWP (entering without password) is not allowed for G-OS versions more than 2.")
+      }
+    }
+
+    function hideMainApp() {
+      document.getElementById("logout").style.display = "none";
+      document.getElementById("Settings").style.display = "none";
+      document.getElementById("about").style.display = "none";
+      document.getElementById("jsh_ide").style.display = "none";
+      document.getElementById("files_explorer").style.display = "none";
+    }
+
+    function checkIfLoggedIn(){
+      if (!loggedIn){
+        document.getElementById("window_settings").style.display = "none";
+        document.getElementById("about_window").style.display = "none";
+        document.getElementById("jsh-ide").style.display = "none";
+      }
+
+    }
+
+    // Make draggable
+    function makeDraggable(windowId, headerId) {
+      const win = document.getElementById(windowId);
+      const header = document.getElementById(headerId);
+      let offsetX = 0, offsetY = 0;
+
+      header.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - win.offsetLeft;
+        offsetY = e.clientY - win.offsetTop;
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stop);
+      });
+
+      function drag(e) {
+        if (isDragging) {
+          win.style.left = `${e.clientX - offsetX}px`;
+          win.style.top = `${e.clientY - offsetY}px`;
+        }
+      }
+
+      function stop() {
+        isDragging = false;
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', stop);
+      }
+    }
+
+    window.onload = () => {
+      makeDraggable('window_settings', 'settings-header');
+      makeDraggable('about_window', 'about-header');
+      makeDraggable('logout-window', 'logout-header');
+      makeDraggable('jsh-ide', 'jsh-ide-header');
+      makeDraggable('files-explorer', 'files-explorer-header');
+      hideMainApp();
+    };
+
+    // Right-click menu
+    const menu = document.getElementById('customize');
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      menu.style.top = `${e.pageY}px`;
+      menu.style.left = `${e.pageX}px`;
+      menu.style.display = 'block';
+    });
+
+    document.addEventListener('click', function() {
+      menu.style.display = 'none';
+    });
+    // END
+    // JSH IDE SCRIPT
+    async function runjshIDE(){
+      const code = document.getElementById("jsh-code-area").value.trim();
+    let output = document.getElementById("jsh-output-area");
+    let errored = 0;
+
+    // console.string.jout() function matching
+    const regexWithSemicolon = /console\.string\.jout\s*\(\s*"([^"]*)"\s*\)\s*;/g;
+    const regexWithoutSemicolon = /console\.string\.jout\s*\(\s*"([^"]*)"\s*\)\s*$/g;
+
+    let matchesWithSemi = [...code.matchAll(regexWithSemicolon)];
+    let matchesWithoutSemi = [...code.matchAll(regexWithoutSemicolon)];
+
+    if (matchesWithSemi.length > 0) {
+        // Print valid lines
+        if("$" in matchesWithSemi.map(m => m[1])){
+          output.textContent += matchesWithSemi.map(m => m[1].replace("$", integer)).join("\n") + "\n";
+        }
+        else{
+          output.textContent += "\n" + matchesWithSemi.map(m => m[1]).join("\n") + "\n";
+        }
+    } 
+    else if (matchesWithoutSemi.length > 0) {
+        // Found syntax without semicolon
+        output.textContent += " ERROR (most recent call last):\n A function MUST end with a semicolon. \n";
+        output.textContent += "Error type: SyntaxError";
+        errored = 1;
+    } 
+    else {
+        // Everything else = unknown syntax
+        output.textContent = "ERROR: function in your code is not defined. \n";
+        output.textContent += "Error type: UndefinedFunction";
+        errored = 1;
+    }
+
+    const regexWarningWithSemicolon = /console\.string.Warn\s*\(\s*"([^"]*)"\s*\)\s*;/g;
+    const regexWarningWithoutSemicolon = /console\.string.Warn\s*\(\s*"([^"]*)"\s*\)\s*$/g;
+    let warningMatchesWithSemi = [...code.matchAll(regexWarningWithSemicolon)];
+    let warningMatchesWithoutSemi = [...code.matchAll(regexWarningWithoutSemicolon)];
+
+    // Print warnings if found
+    if (warningMatchesWithSemi.length > 0) {
+        output.textContent += "\n" + warningMatchesWithSemi.map(m => "Warning: " + m[1]).join("\n");
+    } else if (warningMatchesWithoutSemi.length > 0) {
+        output.textContent += "\n ERROR (most recent call last):\n A function MUST end with a semicolon. \n";
+        output.textContent += "Error type: SyntaxError";
+        errored = 1;
+    }
+    // throw function matching
+const regexRaiseWithSemi = /throw\s*"([^"]*)"\s*\(\s*"([^"]*)"\s*\)\s*;/g;
+const regexRaiseWithoutSemi = /throw\s*"([^"]*)"\s*\(\s*"([^"]*)"\s*\)\s*$/g;
+
+
+let raiseMatchesWithSemi = [...code.matchAll(regexRaiseWithSemi)];
+let raiseMatchesWithoutSemi = [...code.matchAll(regexRaiseWithoutSemi)];
+
+if (raiseMatchesWithSemi.length > 0) {
+    output.textContent += "\n" + raiseMatchesWithSemi.map(m =>
+        `ERROR (most recent call last): ${m[2]}\nError type: ${m[1]}`).join("\n");
+    errored = 1;
+} 
+else if (raiseMatchesWithoutSemi.length > 0) {
+    output.textContent += "\n ERROR (most recent call last):\nA function MUST end with a semicolon. \n";
+    output.textContent += "Error type: SyntaxError";
+    errored = 1;
+}
+let integer = "";
+const intDeclarationWithSemi = /int\s+[a-zA-Z0-9_]+\s*;/g;
+const intDeclarationWithoutSemi = /int\s+[a-zA-Z0-9_]+\s*$/g;
+let intMatchesWithSemi = [...code.matchAll(intDeclarationWithSemi)];
+let intMatchesWithoutSemi = [...code.matchAll(intDeclarationWithoutSemi)];
+
+if (intMatchesWithSemi.length > 0) {
+    integer = intMatchesWithSemi[0][0] + "TYPE:INT";
+    return integer;
+}
+
+else if (intMatchesWithoutSemi.length > 0) {
+    output.textContent += "\n ERROR (most recent call last):\n A function MUST end with a semicolon. \n";
+    output.textContent += "Error type: SyntaxError";
+    errored = 1;
+}
+
+const regexPrivacy = /JshError\.onboard\.privacy\(\);/g;
+let privacyMatches = [...code.matchAll(regexPrivacy)];
+if (privacyMatches.length > 0) {
+    output.textContent += "\n Sorry, we cannot show you all lines of this code, either the creator does not want to share it, or it contains sensitive information. \n";
+}
+
+const regexWIP = /JshError\.onboard\.WorkInProgress\(\);/g;
+let wipMatches = [...code.matchAll(regexWIP)];
+if (wipMatches.length > 0) {
+  output.textContent += "\n This code is still in progress, the code may not work as expected. \n";
+}
+
+const commentRegex = /\<\<.*/g;
+let commentMatches = [...code.matchAll(commentRegex)];
+if (commentMatches.length > 0) {
+// Do almost nothing, this regex only prevents errors from comments
+  error = 0;
+}
+
+if (errored === 0) {
+    output.textContent += "\n\n === Code execution completed successfully. === \n\n";
+} else {
+    output.textContent += "\n\n=== Code Execution terminated due to errors. === \n\n";
+}
+
+    }
+  </script>
+</body>
+</html>
