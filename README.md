@@ -7,6 +7,7 @@ Read "HOW TO GET IN IF PASSWORD IS FORGOTTEN.md" for more information.
 
 <strong>How to download G-OS?</strong><br>
 You don't entirely <strong>download</strong> it, but you can upload it, and double press one of the files that have "G-OS" and a number beside it, all of them are particularly the same.
+<strong>NOTE!</strong>: If you want to download G-OS 1 (Name: G-OS only), also download style.css, and put them both in the same folder location... Otherwise G-OS won't look nice
 
 <strong>Updates: </strong><br>
 <strong>G-OS 2.0 is finally here!</strong><br>
